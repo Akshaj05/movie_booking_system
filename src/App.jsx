@@ -5,6 +5,7 @@ import { supabase } from "./CreateClient";
 import Home from "./pages/home";
 import Login from "./pages/login";
 import SignUp from "./pages/signup";
+import MoviePg from "./pages/movie";
 
 const App = () => {
   // const [users, setUsers] = useState([]);
@@ -25,6 +26,7 @@ const App = () => {
         <Route path="/" element={<Login />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/home" element={<Home />} />
+        <Route path="/movie" element={<MoviePg />} />
       </Routes>
     </Router>
   );
