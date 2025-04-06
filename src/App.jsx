@@ -6,7 +6,8 @@ import Home from "./pages/home";
 import Login from "./pages/login";
 import SignUp from "./pages/signup";
 import MoviePg from "./pages/movie";
-
+import Support from "./pages/support";
+import About from "./pages/aboutus";
 const App = () => {
   // const [users, setUsers] = useState([]);
   // console.log(users);
@@ -27,6 +28,8 @@ const App = () => {
         <Route path="/signup" element={<SignUp />} />
         <Route path="/home" element={<Home />} />
         <Route path="/movie" element={<MoviePg />} />
+        <Route path="/support" element={<Support />} />
+        <Route path="/about" element={<About />} />
       </Routes>
     </Router>
   );
