@@ -7,7 +7,7 @@ import SignUp from "./pages/signup";
 import MoviePg from "./pages/movie";
 import Support from "./pages/support";
 import About from "./pages/aboutus";
-
+import Booking from "./pages/booking";
 import { UserContext } from "./UserContext";
 import { UserProvider } from "./UserContext";
 
@@ -34,6 +34,7 @@ const App = () => {
           <Route path="/signup" element={<SignUp />} />
           <Route path="/home" element={<Home />} />
           <Route path="/movie/:m_id" element={<MoviePg />} />
+          <Route path="/booking/:m_id" element={<Booking />} />
           <Route path="/support" element={<Support />} />
           <Route path="/about" element={<About />} />
         </Routes>

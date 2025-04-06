@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import Navbar from "../components/Navbar.jsx";
 import Footer from "../components/Footer.jsx";
 import { supabase } from "../CreateClient.js";
@@ -9,6 +9,7 @@ const MoviePg = () => {
   const { m_id } = useParams();
   const [movieinfo, setMovieInfo] = useState(null);
 
+  // Fetch movie info
   async function fetchMovieInfo(m_id) {
     const { data, error } = await supabase
       .from("movies")
@@ -25,6 +26,7 @@ const MoviePg = () => {
     }
   }
 
+  // Load movie info when component mounts
   useEffect(() => {
     if (m_id) {
       fetchMovieInfo(m_id);
@@ -65,9 +67,11 @@ const MoviePg = () => {
                     </span>
                   </div>
                   <p className="text-gray-300 mb-4">{movieinfo.m_desc}</p>
-                  <button className="bg-red-900 hover:bg-red-800 text-white font-bold py-2 px-6 rounded flex items-center">
-                    BUY TICKETS
-                  </button>
+                  <Link to={`/booking/${m_id}`}>
+                    <button className="bg-red-900 hover:bg-red-800 text-white font-bold py-2 px-6 rounded flex items-center">
+                      BUY TICKETS
+                    </button>
+                  </Link>
                 </div>
 
                 <section className="mb-8">
@@ -80,7 +84,7 @@ const MoviePg = () => {
                     ))}
                   </div>
                 </section>
-                <section className="mb-8 w-[40vw]  ">
+                <section className="mb-8 w-[40vw]">
                   <div className="flex mb-4 items-center">
                     <button
                       className={`flex-1 py-3 font-bold rounded-lg ${
@@ -149,8 +153,6 @@ const MoviePg = () => {
               </div>
             </div>
           </div>
-
-          {/* Tabs */}
         </main>
         <Footer />
       </div>
