@@ -1,7 +1,7 @@
 import React from "react";
 import Navbar from "../components/Navbar.jsx";
 import Icon1 from "../images/popcorn.svg";
-import Icon2 from "../images/controller.svg";
+import Icon2 from "../images/moobies.svg";
 import Utkarsh from "../images/Utkarsh.jpg";
 import Kshitij from "../images/Kshitij.png";
 import Akshaj from "../images/Askhaj.jpg";
@@ -19,13 +19,15 @@ const About = () => {
             About
           </h1>
           <h1 className="text-[#6B0000] text-4xl font-mainFont font-normal text-center pt-10 lg:text-6xl  ">
-          CineSphere
+            CineSphere
           </h1>
         </div>
         <p className="text-white font-mainFont font-[300] text-center w-4/5 mx-auto mt-5 lg:mt-10 lg:text-[1.2rem] lg:w-[60rem]">
-        Welcome to CineSphere, your ultimate destination for seamless movie ticket booking. 
-        Explore a universe of entertainment with our handpicked selection of the latest blockbusters and timeless classics. 
-        Enhance your movie-going experience with us, where convenience meets cinematic magic!
+          Welcome to CineSphere, your ultimate destination for seamless movie
+          ticket booking. Explore a universe of entertainment with our
+          handpicked selection of the latest blockbusters and timeless classics.
+          Enhance your movie-going experience with us, where convenience meets
+          cinematic magic!
         </p>
       </div>
 
@@ -39,13 +41,14 @@ const About = () => {
             />
             <div className="lg:w-1/3">
               <h2 className=" text-[#6B0000] font-mainFont font-semibold text-[1.4rem] text-center mt-7 lg:text-left lg:text-3xl">
-              IMMERSE YOURSELF IN CINEMATIC MAGIC
+                IMMERSE YOURSELF IN CINEMATIC MAGIC
               </h2>
               <p className="text-center text-white font-mainFont lg:text-xl font-extralight mt-4 lg:text-left">
-              Discover the latest blockbusters or timeless classics at CineSphere, 
-              where every seat offers a front-row experience to unforgettable stories. We bring you a wide selection of movies, 
-              Book your tickets now and be part of the movie magic-your perfect showtime awaits!
-
+                Discover the latest blockbusters or timeless classics at
+                CineSphere, where every seat offers a front-row experience to
+                unforgettable stories. We bring you a wide selection of movies,
+                Book your tickets now and be part of the movie magic-your
+                perfect showtime awaits!
               </p>
             </div>
           </div>
@@ -54,19 +57,19 @@ const About = () => {
         <div className="flex-col justify-center content-center bg-[#181C24]">
           <div className="m-10 lg:flex justify-center lg:mt-[3rem]">
             <img
-              src="src/images/moobies.svg"
+              src={Icon2}
               alt="icon"
               className=" mx-auto mt-10 h-[12rem] w-[12rem] lg:mx-0 lg:mr-[1rem] lg:mt-0"
             />
             <div className="lg:w-1/3">
               <h2 className=" text-[#6B0000] font-mainFont font-semibold text-[1.4rem] text-center mt-7 lg:text-left lg:text-3xl">
-              DESIGNED FOR EVERY MOVIE LOVER
+                DESIGNED FOR EVERY MOVIE LOVER
               </h2>
               <p className="text-center text-white font-mainFont mb-[5rem] lg:text-xl  font-extralight mt-4 lg:text-left">
-              CineSphere’s platform offers smooth browsing, special discounts, 
-              and stunning visuals for a seamless and delightful ticket booking experience. 
-              Whether you're into rom-coms or thrillers, your next movie night is just a click away!
-
+                CineSphere’s platform offers smooth browsing, special discounts,
+                and stunning visuals for a seamless and delightful ticket
+                booking experience. Whether you're into rom-coms or thrillers,
+                your next movie night is just a click away!
               </p>
             </div>
           </div>
