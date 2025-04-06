@@ -281,12 +281,82 @@ const Admin = () => {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 disabled:bg-green-300"
+                className="w-full px-4 py-2 bg-red-800 text-white rounded hover:bg-red-900 disabled:bg-green-300"
               >
                 {loading ? "Adding Movie..." : "Add Movie"}
               </button>
             </form>
           </div>
+          {/* Show Timings Section
+          <div className="bg-gray-800 p-6 rounded shadow text-white placeholder:text-gray-500 mt-8">
+            <h2 className="text-xl font-semibold mb-4">Add Show Timings</h2>
+
+            <form
+              onSubmit={async (e) => {
+                e.preventDefault();
+                setLoading(true);
+                setStatusMessage("");
+
+                const m_id = e.target.m_id.value;
+                const show_time = e.target.show_time.value;
+
+                try {
+                  const { data, error } = await supabase
+                    .from("showtimes")
+                    .insert([{ m_id: parseInt(m_id), show_time }])
+                    .select();
+
+                  if (error) throw error;
+
+                  setStatusMessage("Show timing added successfully");
+                  setStatusType("success");
+                  e.target.reset();
+                } catch (error) {
+                  console.error("Error adding show timing:", error.message);
+                  setStatusMessage("Failed to add show timing");
+                  setStatusType("error");
+                } finally {
+                  setLoading(false);
+                }
+              }}
+              className="space-y-4"
+            >
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium mb-1">
+                    Movie ID
+                  </label>
+                  <input
+                    type="number"
+                    name="m_id"
+                    required
+                    className="w-full px-3 py-2 border rounded"
+                    placeholder="Enter Movie ID"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium mb-1">
+                    Show Time
+                  </label>
+                  <input
+                    type="datetime-local"
+                    name="show_time"
+                    required
+                    className="w-full px-3 py-2 border rounded"
+                  />
+                </div>
+              </div>
+
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full px-4 py-2 bg-red-800 text-white rounded hover:bg-red-900 disabled:bg-green-300"
+              >
+                {loading ? "Adding Timing..." : "Add Show Timing"}
+              </button>
+            </form>
+          </div> */}
         </div>
       </div>
       <Footer />
