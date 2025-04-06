@@ -58,15 +58,18 @@ const Home = () => {
         <div className="flex justify-center items-center mb-5">
           <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-15 p-6">
             {movieinfo.map((movie) => (
-              <div className=" shadow-red-800 text-white p-4 rounded-lg shadow-lg hover:shadow-xl transition-shadow min-w-[15] max-w-80">
+              <div
+                key={movie.m_id} // 🔧 move the key here
+                className="shadow-red-800 text-white p-4 rounded-lg shadow-lg hover:shadow-xl transition-shadow min-w-[15] max-w-80"
+              >
                 <img
                   src={movie.m_image}
                   alt={movie.m_name}
                   className="object-cover rounded-md mb-4 min-h-[95] max-h-[95%]"
                 />
                 <div className="flex justify-center">
-                  <Link to={`/movie/${movie.m_id}`} key={movie.m_id}>
-                    <button className="bg-red-800  text-white font-bold py-2 px-6 rounded">
+                  <Link to={`/movie/${movie.m_id}`}>
+                    <button className="bg-red-800 text-white font-bold py-2 px-6 rounded">
                       Book Now
                     </button>
                   </Link>

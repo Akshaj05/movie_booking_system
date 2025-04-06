@@ -1,135 +1,148 @@
-import React, { useState } from "react";
-import { NavLink } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 import Navbar from "../components/Navbar.jsx";
 import Footer from "../components/Footer.jsx";
-import { useParams } from "react-router-dom";
 import { supabase } from "../CreateClient.js";
-import { useEffect } from "react";
-import { useContext } from "react";
-import { Link } from "react-router-dom";
 
 const MoviePg = () => {
   const [activeTab, setActiveTab] = useState("about");
-
   const { m_id } = useParams();
-  const [movieinfo, setMovieInfo] = useState([]);
+  const [movieinfo, setMovieInfo] = useState(null);
 
-  async function fetchMovieInfo() {
-    const { data } = await supabase.from("movies").select("*").eq("m_id", m_id);
-    setMovieInfo(data);
+  async function fetchMovieInfo(m_id) {
+    const { data, error } = await supabase
+      .from("movies")
+      .select("*")
+      .eq("m_id", m_id);
+
+    if (error) {
+      console.error("Error fetching movie:", error);
+      return;
+    }
+
+    if (data.length > 0) {
+      setMovieInfo(data[0]);
+    }
   }
+
   useEffect(() => {
-    fetchMovieInfo();
-  }, []);
+    if (m_id) {
+      fetchMovieInfo(m_id);
+    }
+  }, [m_id]);
+
+  if (!movieinfo) {
+    return (
+      <div className="text-white flex justify-center items-center h-screen bg-gray-900">
+        Loading movie info...
+      </div>
+    );
+  }
 
   return (
     <>
       <Navbar />
       <div className="flex flex-col min-h-screen bg-gray-900 text-white">
-        {/* Main Content */}
         <main className="flex flex-col gap-17 px-6 py-4">
           <div className="flex flex-row justify-center gap-[5vw] items-center">
-            {/* Left Column - Movie Info */}
-            <div className="md:w-1/2  flex flex-col gap-15">
+            {/* Left Column - Info */}
+            <div className="md:w-1/2 flex flex-col gap-6">
               <div>
-                <h1 className="text-4xl font-bold mb-4">
-                  {movieinfo[m_id]?.m_name}
-                </h1>
+                <h1 className="text-4xl font-bold mb-4">{movieinfo.m_name}</h1>
                 <div className="flex items-center space-x-4 mb-4">
                   <span className="px-2 py-1 bg-red-900 text-xs rounded">
-                    {movieinfo[m_id]?.m_genre}
+                    {movieinfo.m_genres}
                   </span>
-                  <span className="text-gray-400">English</span>
-                  <span className="text-gray-400">Brian Cranston</span>
+                  <span className="text-gray-400">{movieinfo.age_rating}</span>
+                  <span className="text-yellow-400 font-semibold">
+                    ⭐ {movieinfo.rating}/10
+                  </span>
                 </div>
-                <p className="text-gray-300 mb-4">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
-                  leo ex placerat volutpat. Praesent consectetur vulputate
-                  pulvinar, gravida id quam. Fusce rutrum consequat ligula.
-                  Fusce ac nisi non justo aliquet ultrices. Mi turpis porta
-                  risus, dignissim lacinia velit felis a quam. In auctor ut
-                  tortor sit amet rhoncus.
-                </p>
+                <p className="text-gray-300 mb-4">{movieinfo.m_desc}</p>
                 <button className="bg-red-900 hover:bg-red-800 text-white font-bold py-2 px-6 rounded flex items-center">
                   BUY TICKETS
                 </button>
               </div>
+
               <section className="mb-8">
                 <h2 className="text-xl font-bold mb-4">CAST</h2>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                  <h1>Cast 1</h1>
-                  <h1>Cast 2</h1>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-gray-300">
+                  {movieinfo.cast?.split(",").map((actor, i) => (
+                    <h1 key={i}>{actor.trim()}</h1>
+                  ))}
                 </div>
               </section>
             </div>
 
-            {/* Right Column - Movie Poster */}
-            <div className=" ">
-              <div className="">
-                <img
-                  src="https://m.media-amazon.com/images/M/MV5BMTMxNTMwODM0NF5BMl5BanBnXkFtZTcwODAyMTk2Mw@@._V1_FMjpg_UX1000_.jpg"
-                  alt="Alien Romulus movie poster"
-                  className="w-[20vw] rounded-lg shadow-lg"
-                />
-              </div>
+            {/* Right Column - Poster */}
+            <div>
+              <img
+                src={movieinfo.m_image}
+                alt={`${movieinfo.m_name} poster`}
+                className="w-[20vw] rounded-lg shadow-lg"
+              />
             </div>
           </div>
-          {/* Movie Details Tabs */}
-          <section className="mb-8 w-[70vw] mx-auto  items-center">
-            <div>
-              <div className="flex mb-4 items-center">
-                <button
-                  className={`flex-1 py-3 font-bold rounded-lg ${
-                    activeTab === "about" ? "bg-red-900" : "bg-gray-800"
-                  }`}
-                  onClick={() => setActiveTab("about")}
-                >
-                  ABOUT MOVIE
-                </button>
-                <button
-                  className={`flex-1 py-3 font-bold rounded-lg ${
-                    activeTab === "details" ? "bg-red-900" : "bg-gray-800"
-                  }`}
-                  onClick={() => setActiveTab("details")}
-                >
-                  MORE DETAILS
-                </button>
-              </div>
+
+          {/* Tabs */}
+          <section className="mb-8 w-[70vw] mx-auto items-center">
+            <div className="flex mb-4 items-center">
+              <button
+                className={`flex-1 py-3 font-bold rounded-lg ${
+                  activeTab === "about" ? "bg-red-900" : "bg-gray-800"
+                }`}
+                onClick={() => setActiveTab("about")}
+              >
+                ABOUT MOVIE
+              </button>
+              <button
+                className={`flex-1 py-3 font-bold rounded-lg ${
+                  activeTab === "details" ? "bg-red-900" : "bg-gray-800"
+                }`}
+                onClick={() => setActiveTab("details")}
+              >
+                MORE DETAILS
+              </button>
             </div>
 
             <div className="bg-gray-800 rounded-lg p-6">
               {activeTab === "about" && (
-                <div>
-                  <h3 className="font-bold mb-2">Cast</h3>
-                  <p className="text-gray-400 mb-4">
-                    Lorem ipsum dolor Sit Amet, Consectetur Adipiscing Elit. Sed
-                    Leo Brewer volutpat. Praesent consectetur vulputate
-                    pulvinar, gravida id quam. Et Duis Aute Irure Dolor.
-                  </p>
-
-                  <h3 className="font-bold mb-2">Rating</h3>
-                  <p className="text-gray-400">
-                    Fugiat nulla dolor Sit Amet, Consectetur Adipiscing Elit.
-                    Sed Leo Brewer volutpat. Praesent consectetur vulputate
-                    pulvinar, gravida id quam. Et Duis Aute Irure Dolor.
-                  </p>
+                <div className="text-gray-300 space-y-4">
+                  <div>
+                    <h3 className="font-bold mb-1">Director</h3>
+                    <p>{movieinfo.director}</p>
+                  </div>
+                  <div>
+                    <h3 className="font-bold mb-1">Writers</h3>
+                    <p>{movieinfo.writers}</p>
+                  </div>
+                  <div>
+                    <h3 className="font-bold mb-1">Genres</h3>
+                    <p>{movieinfo.m_genres}</p>
+                  </div>
                 </div>
               )}
 
               {activeTab === "details" && (
-                <div>
-                  <h3 className="font-bold mb-2">Release Information</h3>
-                  <p className="text-gray-400 mb-4">
-                    Released on August 16, 2024 in theaters worldwide.
-                  </p>
-
-                  <h3 className="font-bold mb-2">Runtime</h3>
-                  <p className="text-gray-400">1 hour and 52 minutes</p>
+                <div className="text-gray-300 space-y-4">
+                  <div>
+                    <h3 className="font-bold mb-1">Year</h3>
+                    <p>{movieinfo.m_year}</p>
+                  </div>
+                  <div>
+                    <h3 className="font-bold mb-1">Runtime</h3>
+                    <p>{movieinfo.m_length}</p>
+                  </div>
+                  <div>
+                    <h3 className="font-bold mb-1">Age Rating</h3>
+                    <p>{movieinfo.age_rating}</p>
+                  </div>
                 </div>
               )}
             </div>
           </section>
         </main>
+        <Footer />
       </div>
     </>
   );
