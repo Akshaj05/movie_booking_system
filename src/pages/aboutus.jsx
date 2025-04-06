@@ -54,7 +54,7 @@ const About = () => {
         <div className="flex-col justify-center content-center bg-[#181C24]">
           <div className="m-10 lg:flex justify-center lg:mt-[3rem]">
             <img
-              src={Icon2}
+              src="src/images/moobies.svg"
               alt="icon"
               className=" mx-auto mt-10 h-[12rem] w-[12rem] lg:mx-0 lg:mr-[1rem] lg:mt-0"
             />

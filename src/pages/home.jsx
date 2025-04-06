@@ -43,7 +43,7 @@ const Home = () => {
           <div className="hidden lg:block w-full self-center ">
             <div className="py-10">
               <h1 className="text-white font-mono font-[450] text-[2.9rem] text-center tracking-wide drop-shadow-2xl">
-                Search Your One From Thousands of
+                Search for 
               </h1>
               <h1 className="text-red-800 font-mono font-[450] text-[2.9rem] text-center mb-7 tracking-wide drop-shadow-2xl">
                 Movies
