@@ -10,11 +10,13 @@ const Booking = () => {
   const [movieinfo, setMovieInfo] = useState(null);
   const [showTimings, setShowTimings] = useState([]);
   const [selectedTiming, setSelectedTiming] = useState(null);
+  const [occupiedSeats, setOccupiedSeats] = useState([]);
   const [seats, setSeats] = useState([]);
   const [selectedSeats, setSelectedSeats] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
   const [user, setUser] = useState(null);
   const [bookingStatus, setBookingStatus] = useState("");
+  const [isProcessing, setIsProcessing] = useState(false);
 
   // Fetch movie info
   async function fetchMovieInfo(m_id) {
@@ -48,61 +50,60 @@ const Booking = () => {
     setShowTimings(data);
   }
 
-  // Fetch seats for a selected show timing
+  // Fetch all seats and mark which ones are occupied for the selected show timing
   async function fetchSeats(st_id) {
-    // First, get all seats
-    const { data: allSeats, error: seatsError } = await supabase
-      .from("seats")
-      .select("*")
-      .order("seat_number");
+    try {
+      // First, get all seats from the database
+      const { data: allSeats, error: seatsError } = await supabase
+        .from("seats")
+        .select("*")
+        .order("seat_number");
 
-    if (seatsError) {
-      console.error("Error fetching seats:", seatsError);
-      return;
-    }
+      if (seatsError) throw seatsError;
 
-    // Now get all booked seats for this show timing
-    const { data: bookings, error: bookingsError } = await supabase
-      .from("booking")
-      .select("b_id")
-      .eq("st_id", st_id);
+      // Get bookings for this show timing
+      const { data: bookings, error: bookingsError } = await supabase
+        .from("booking")
+        .select("b_id")
+        .eq("st_id", st_id);
 
-    if (bookingsError) {
-      console.error("Error fetching bookings:", bookingsError);
-      return;
-    }
+      if (bookingsError) throw bookingsError;
 
-    if (bookings.length > 0) {
-      // Get all booking_seats entries for these bookings
-      const b_ids = bookings.map((booking) => booking.b_id);
+      let occupiedSeatIds = [];
 
-      const { data: bookedSeats, error: bookedSeatsError } = await supabase
-        .from("booking_seats")
-        .select("s_id")
-        .in("b_id", b_ids);
+      if (bookings && bookings.length > 0) {
+        // Get all booking_seats entries for these bookings
+        const b_ids = bookings.map((booking) => booking.b_id);
 
-      if (bookedSeatsError) {
-        console.error("Error fetching booked seats:", bookedSeatsError);
-        return;
+        const { data: bookedSeats, error: bookedSeatsError } = await supabase
+          .from("booking_seats")
+          .select("s_id")
+          .in("b_id", b_ids);
+
+        if (bookedSeatsError) throw bookedSeatsError;
+
+        // Extract the s_id values
+        occupiedSeatIds = bookedSeats.map((bs) => bs.s_id);
       }
 
-      // Mark seats as occupied if they're in the bookedSeats array
-      const bookedSeatIds = bookedSeats.map((bs) => bs.s_id);
-
+      // Mark each seat as occupied or not
       const seatsWithOccupancy = allSeats.map((seat) => ({
         ...seat,
-        is_occupied: bookedSeatIds.includes(seat.s_id),
+        is_occupied: occupiedSeatIds.includes(seat.s_id),
       }));
 
       setSeats(seatsWithOccupancy);
-    } else {
-      // No bookings for this show timing, so all seats are available
-      setSeats(
-        allSeats.map((seat) => ({
-          ...seat,
-          is_occupied: false,
-        }))
-      );
+
+      // Keep track of which seats are occupied for double-booking prevention
+      const occupiedSeatNumbers = allSeats
+        .filter((seat) => occupiedSeatIds.includes(seat.s_id))
+        .map((seat) => seat.seat_number);
+
+      setOccupiedSeats(occupiedSeatNumbers);
+    } catch (error) {
+      console.error("Error fetching seats:", error);
+      setSeats([]);
+      setOccupiedSeats([]);
     }
   }
 
@@ -138,9 +139,11 @@ const Booking = () => {
   const selectTiming = (timing) => {
     setSelectedTiming(timing);
     fetchSeats(timing.st_id);
+    // Reset selections when changing timing
+    setSelectedSeats([]);
   };
 
-  // Confirm booking
+  // Modified confirm booking process to prevent race conditions
   const confirmBooking = async () => {
     if (selectedSeats.length === 0) {
       alert("Please select at least one seat.");
@@ -152,17 +155,34 @@ const Booking = () => {
       return;
     }
 
-    // CRITICAL CHECK: Ensure user has enough balance
+    // Check if user has enough balance
     if (user.balance < totalPrice) {
       setBookingStatus(
         "Insufficient balance. Please add funds to your account."
       );
-      return; // Early return prevents any database operations
+      return;
     }
 
     try {
-      // Start a transaction
+      setIsProcessing(true);
       setBookingStatus("Processing your booking...");
+
+      // Check if seats are still available by re-fetching
+      await fetchSeats(selectedTiming.st_id);
+
+      // Check if any of our selected seats have been booked while we were deciding
+      const anyNewlyOccupied = selectedSeats.some((seat) =>
+        seats.some((s) => s.s_id === seat.s_id && s.is_occupied)
+      );
+
+      if (anyNewlyOccupied) {
+        setBookingStatus(
+          "Sorry, one or more of your selected seats has been booked by someone else. Please choose different seats."
+        );
+        setIsProcessing(false);
+        setSelectedSeats([]);
+        return;
+      }
 
       // 1. Create a new booking record
       const { data: bookingData, error: bookingError } = await supabase
@@ -170,7 +190,7 @@ const Booking = () => {
         .insert([
           {
             st_id: selectedTiming.st_id,
-            u_id: user.u_id, // Using u_id from user object
+            u_id: user.u_id,
             price: totalPrice,
           },
         ])
@@ -196,7 +216,7 @@ const Booking = () => {
       const { error: updateUserError } = await supabase
         .from("users")
         .update({ balance: user.balance - totalPrice })
-        .eq("u_id", user.u_id); // Using u_id for the WHERE clause
+        .eq("u_id", user.u_id);
 
       if (updateUserError) throw updateUserError;
 
@@ -218,9 +238,14 @@ const Booking = () => {
       setBookingStatus("Booking successful! Your booking ID is: " + b_id);
       setSelectedSeats([]);
       setTotalPrice(0);
+
+      // Refresh the seats to show updated availability
+      fetchSeats(selectedTiming.st_id);
     } catch (error) {
       console.error("Error during booking:", error);
-      setBookingStatus("An error occurred during booking. Please try again.");
+      setBookingStatus("An error occurred during booking: " + error.message);
+    } finally {
+      setIsProcessing(false);
     }
   };
 
@@ -229,10 +254,6 @@ const Booking = () => {
     const userData = JSON.parse(localStorage.getItem("user"));
     if (userData) {
       setUser(userData);
-    } else {
-      // Redirect to login if user is not logged in
-      // navigate("/");
-      // Uncomment the above line if you want to force login
     }
   }, []);
 
@@ -248,63 +269,6 @@ const Booking = () => {
     return (
       <div className="text-white flex justify-center items-center h-screen bg-gray-900">
         Loading booking information...
-      </div>
-    );
-  }
-  const seatLayout = {
-    A: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14],
-    B: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17],
-    C: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17],
-    D: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17],
-    E: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17],
-    F: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17],
-    G: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15],
-    H: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15],
-    I: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15],
-    J: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15],
-    K: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15],
-    L: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15],
-    M: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15],
-    N: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15],
-  };
-
-  function SeatSelector({ selectedSeats, toggleSeatSelection }) {
-    return (
-      <div className="mb-8">
-        {/* Screen */}
-        <div className="w-3/4 h-8 mx-auto mb-10 bg-gray-400 rounded-lg flex items-center justify-center text-gray-800 font-bold">
-          SCREEN
-        </div>
-
-        {/* Seat Layout */}
-        {Object.entries(seatLayout).map(([row, seats]) => (
-          <div key={row} className="mb-4">
-            <div className="flex items-center gap-2 mb-1">
-              <span className="w-6 font-bold">{row}</span>
-              <div className="grid grid-cols-17 gap-2">
-                {seats.map((number) => {
-                  const seatId = `${row}${number}`;
-                  const isSelected = selectedSeats.includes(seatId);
-
-                  return (
-                    <button
-                      key={seatId}
-                      onClick={() => toggleSeatSelection(seatId)}
-                      className={`w-8 h-8 text-xs rounded flex items-center justify-center
-                        ${
-                          isSelected
-                            ? "bg-green-600 text-white"
-                            : "bg-gray-700 hover:bg-gray-600 text-white"
-                        }`}
-                    >
-                      {number}
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-          </div>
-        ))}
       </div>
     );
   }
@@ -340,7 +304,7 @@ const Booking = () => {
               <div className="mb-6 p-3 bg-gray-700 rounded-lg">
                 <p>
                   Your Balance:{" "}
-                  <span className="font-bold">${user.balance}</span>
+                  <span className="font-bold">₹{user.balance}</span>
                 </p>
               </div>
             ) : (
@@ -406,7 +370,7 @@ const Booking = () => {
                             ? "bg-green-600 text-white"
                             : "bg-gray-700 hover:bg-gray-600"
                         }`}
-                        title={`${seat.category} - $${seat.price}`}
+                        title={`${seat.category} - ₹${seat.price}`}
                       >
                         {seat.seat_number}
                       </button>
@@ -440,13 +404,13 @@ const Booking = () => {
                           key={seat.s_id}
                           className="px-2 py-1 bg-green-900 rounded text-sm"
                         >
-                          {seat.seat_number} (${seat.price})
+                          {seat.seat_number} (₹{seat.price})
                         </span>
                       ))}
                     </div>
                     <div className="flex justify-between font-bold">
                       <span>Total:</span>
-                      <span>${totalPrice}</span>
+                      <span>₹{totalPrice}</span>
                     </div>
                   </div>
                 )}
@@ -469,14 +433,16 @@ const Booking = () => {
                 {/* Confirm booking button */}
                 <button
                   onClick={confirmBooking}
-                  disabled={selectedSeats.length === 0}
+                  disabled={selectedSeats.length === 0 || isProcessing}
                   className={`w-full py-3 rounded-lg font-bold ${
-                    selectedSeats.length === 0
+                    selectedSeats.length === 0 || isProcessing
                       ? "bg-gray-600 cursor-not-allowed"
                       : "bg-red-900 hover:bg-red-800"
                   }`}
                 >
-                  Confirm Booking (${totalPrice})
+                  {isProcessing
+                    ? "Processing..."
+                    : `Confirm Booking (₹${totalPrice})`}
                 </button>
               </div>
             )}
