@@ -18,14 +18,14 @@ const Footer = () => {
           >
             <div className="bg-[#6B0000]  lg:h-[4.5rem] lg:w-[4.5rem] h-[3rem] w-[3rem] rounded-full flex justify-center items-center">
               <a href="https://www.instagram.com/x0dus_gaming/">
-                <img  
+                <img
                   src={Instagram}
                   className="w-[2rem] h-[2rem] lg:w-[2.5rem] lg:h-[2.5rem] "
                 ></img>
               </a>
             </div>
             <div className="bg-[#6B0000]  lg:h-[4.5rem] lg:w-[4.5rem] h-[3rem] w-[3rem] rounded-full flex justify-center items-center">
-              <a href="https://github.com/Cybercery/gamegrove">
+              <a href="https://github.com/Akshaj05/movie_booking_system">
                 <img
                   src={Github}
                   className="w-[2rem] h-[2rem] lg:w-[2.5rem] lg:h-[2.5rem] "
@@ -48,9 +48,7 @@ const Footer = () => {
             </div>
           </div>
         </div>
-        <p className=" font-mono text-white text-2l text-center">
-          Get Support
-        </p>
+        <p className=" font-mono text-white text-2l text-center">Get Support</p>
         <p className=" font-mono text-[#6B0000] text-2l text-center">
           <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ">
             Tutorial link
