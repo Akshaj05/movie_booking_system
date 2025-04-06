@@ -8,7 +8,7 @@ export const SearchBar = () => {
           className="w-full min-h-[2.5rem] bg-white rounded-full"
           type="text"
           value={input}
-          placeholder="Search for movies..."
+          placeholder="   Search for movies..."
         />
       </div>
     </div>
