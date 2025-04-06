@@ -3,6 +3,10 @@ import { NavLink } from "react-router-dom";
 import NavBar from "../components/Navbar.jsx";
 import Footer from "../components/Footer.jsx";
 import SearchBar from "../components/SearchBar.jsx";
+import { supabase } from "../CreateClient.js";
+import { useContext } from "react";
+import { UserContext } from "../UserContext.jsx";
+import { useNavigate } from "react-router-dom";
 import Img1 from "../images/img1.jpg";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
@@ -16,6 +20,20 @@ const Home = () => {
       console.log(user.phone_no);
     }
   }, []);
+  const { uid } = useContext(UserContext);
+  const navigate = useNavigate();
+
+  const [movieinfo, setMovieInfo] = useState([]);
+
+  useEffect(() => {
+    fetchMovieInfo();
+  }, []);
+  async function fetchMovieInfo() {
+    const { data } = await supabase.from("movies").select("*");
+    setMovieInfo(data);
+  }
+
+  console.log(movieinfo);
 
   return (
     <>
@@ -36,21 +54,7 @@ const Home = () => {
             </div>
           </div>
         </div>
-        <div className="bg-[#101216]">
-          <div className="flex content-between justify-between ">
-            <h1 className="font-mono text-2xl lg:text-3xl mt-6 lg:pt-15  text-white font-light">
-              Currently Screening
-            </h1>
-            <a
-              href="/trending"
-              className="text-white font-mono self-center text-[1rem] lg:text-[1.2rem] lg:pr-[7.5rem] opacity-55 font-light mt-6 lg:mt-12"
-            >
-              View All
-            </a>
-          </div>
-
-          <div className="justify-center content-center text-[0.75rem] mt-5 gap-[1rem] p-0 pt-0  lg:gap-[rem] flex pb-5 flex-wrap "></div>
-        </div>
+        <div></div>
 
         <Footer />
       </div>
