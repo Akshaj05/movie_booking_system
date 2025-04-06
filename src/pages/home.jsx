@@ -59,7 +59,7 @@ const Home = () => {
           <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-15 p-6">
             {movieinfo.map((movie) => (
               <div
-                key={movie.m_id} // 🔧 move the key here
+                key={movie.m_id} // move the key here
                 className="shadow-red-800 text-white p-4 rounded-lg shadow-lg hover:shadow-xl transition-shadow min-w-[15] max-w-80"
               >
                 <img

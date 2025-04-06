@@ -72,10 +72,68 @@ const MoviePg = () => {
 
                 <section className="mb-8">
                   <h2 className="text-xl font-bold mb-4">CAST</h2>
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-gray-300">
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-gray-300 ">
                     {movieinfo.cast?.split(",").map((actor, i) => (
-                      <h1 key={i}>{actor.trim()}</h1>
+                      <h1 key={i} className="">
+                        {actor.trim()}
+                      </h1>
                     ))}
+                  </div>
+                </section>
+                <section className="mb-8 w-[40vw]  ">
+                  <div className="flex mb-4 items-center">
+                    <button
+                      className={`flex-1 py-3 font-bold rounded-lg ${
+                        activeTab === "about" ? "bg-red-900" : "bg-gray-800"
+                      }`}
+                      onClick={() => setActiveTab("about")}
+                    >
+                      ABOUT MOVIE
+                    </button>
+                    <button
+                      className={`flex-1 py-3 font-bold rounded-lg ${
+                        activeTab === "details" ? "bg-red-900" : "bg-gray-800"
+                      }`}
+                      onClick={() => setActiveTab("details")}
+                    >
+                      MORE DETAILS
+                    </button>
+                  </div>
+
+                  <div className="bg-gray-800 rounded-lg p-6">
+                    {activeTab === "about" && (
+                      <div className="text-gray-300 space-y-4">
+                        <div>
+                          <h3 className="font-bold mb-1">Director</h3>
+                          <p>{movieinfo.director}</p>
+                        </div>
+                        <div>
+                          <h3 className="font-bold mb-1">Writers</h3>
+                          <p>{movieinfo.writers}</p>
+                        </div>
+                        <div>
+                          <h3 className="font-bold mb-1">Genres</h3>
+                          <p>{movieinfo.m_genres}</p>
+                        </div>
+                      </div>
+                    )}
+
+                    {activeTab === "details" && (
+                      <div className="text-gray-300 space-y-4">
+                        <div>
+                          <h3 className="font-bold mb-1">Year</h3>
+                          <p>{movieinfo.m_year}</p>
+                        </div>
+                        <div>
+                          <h3 className="font-bold mb-1">Runtime</h3>
+                          <p>{movieinfo.m_length}</p>
+                        </div>
+                        <div>
+                          <h3 className="font-bold mb-1">Age Rating</h3>
+                          <p>{movieinfo.age_rating}</p>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </section>
               </div>
@@ -93,62 +151,6 @@ const MoviePg = () => {
           </div>
 
           {/* Tabs */}
-          <section className="mb-8 w-[70vw] mx-auto items-center">
-            <div className="flex mb-4 items-center">
-              <button
-                className={`flex-1 py-3 font-bold rounded-lg ${
-                  activeTab === "about" ? "bg-red-900" : "bg-gray-800"
-                }`}
-                onClick={() => setActiveTab("about")}
-              >
-                ABOUT MOVIE
-              </button>
-              <button
-                className={`flex-1 py-3 font-bold rounded-lg ${
-                  activeTab === "details" ? "bg-red-900" : "bg-gray-800"
-                }`}
-                onClick={() => setActiveTab("details")}
-              >
-                MORE DETAILS
-              </button>
-            </div>
-
-            <div className="bg-gray-800 rounded-lg p-6">
-              {activeTab === "about" && (
-                <div className="text-gray-300 space-y-4">
-                  <div>
-                    <h3 className="font-bold mb-1">Director</h3>
-                    <p>{movieinfo.director}</p>
-                  </div>
-                  <div>
-                    <h3 className="font-bold mb-1">Writers</h3>
-                    <p>{movieinfo.writers}</p>
-                  </div>
-                  <div>
-                    <h3 className="font-bold mb-1">Genres</h3>
-                    <p>{movieinfo.m_genres}</p>
-                  </div>
-                </div>
-              )}
-
-              {activeTab === "details" && (
-                <div className="text-gray-300 space-y-4">
-                  <div>
-                    <h3 className="font-bold mb-1">Year</h3>
-                    <p>{movieinfo.m_year}</p>
-                  </div>
-                  <div>
-                    <h3 className="font-bold mb-1">Runtime</h3>
-                    <p>{movieinfo.m_length}</p>
-                  </div>
-                  <div>
-                    <h3 className="font-bold mb-1">Age Rating</h3>
-                    <p>{movieinfo.age_rating}</p>
-                  </div>
-                </div>
-              )}
-            </div>
-          </section>
         </main>
         <Footer />
       </div>
