@@ -1,6 +1,6 @@
 import React from "react";
 import Navbar from "../components/Navbar.jsx";
-import Icon1 from "../images/Vector.svg";
+import Icon1 from "../images/popcorn.svg";
 import Icon2 from "../images/controller.svg";
 import Utkarsh from "../images/Utkarsh.jpg";
 import Kshitij from "../images/Kshitij.png";
@@ -18,15 +18,14 @@ const About = () => {
           <h1 className="text-white text-4xl font-mainFont font-normal text-center pt-10 lg:text-6xl">
             About
           </h1>
-          <h1 className="text-[#0066FF] text-4xl font-mainFont font-normal text-center pt-10 lg:text-6xl  ">
-            GameGrove
+          <h1 className="text-[#6B0000] text-4xl font-mainFont font-normal text-center pt-10 lg:text-6xl  ">
+          CineSphere
           </h1>
         </div>
         <p className="text-white font-mainFont font-[300] text-center w-4/5 mx-auto mt-5 lg:mt-10 lg:text-[1.2rem] lg:w-[60rem]">
-          Welcome to GameGrove, your premier online gaming destination. Dive
-          into a world of endless possibilities with our curated selection of
-          the latest video games and accessories. Elevate your gaming experience
-          with us, where the community thrives!
+        Welcome to CineSphere, your ultimate destination for seamless movie ticket booking. 
+        Explore a universe of entertainment with our handpicked selection of the latest blockbusters and timeless classics. 
+        Enhance your movie-going experience with us, where convenience meets cinematic magic!
         </p>
       </div>
 
@@ -39,14 +38,14 @@ const About = () => {
               className="w-1/3 h-1/3 mx-auto mt-10 lg:h-[10rem] lg:w-[10rem] lg:mx-0 lg:mr-[3rem]"
             />
             <div className="lg:w-1/3">
-              <h2 className=" text-[#0066FF] font-mainFont font-semibold text-[1.4rem] text-center mt-7 lg:text-left lg:text-3xl">
-                DIVE INTO A VARIETY OF GAMES
+              <h2 className=" text-[#6B0000] font-mainFont font-semibold text-[1.4rem] text-center mt-7 lg:text-left lg:text-3xl">
+              IMMERSE YOURSELF IN CINEMATIC MAGIC
               </h2>
               <p className="text-center text-white font-mainFont lg:text-xl font-extralight mt-4 lg:text-left">
-                Explore AAA blockbusters or indie gems at GameGrove, where
-                gaming dreams come to life in every title. We also provide users
-                with tons of new Games added every day!! Jump on this thrill
-                ride with us and join us on this journey
+              Discover the latest blockbusters or timeless classics at CineSphere, 
+              where every seat offers a front-row experience to unforgettable stories. We bring you a wide selection of movies, 
+              Book your tickets now and be part of the movie magic-your perfect showtime awaits!
+
               </p>
             </div>
           </div>
@@ -60,14 +59,14 @@ const About = () => {
               className=" mx-auto mt-10 h-[12rem] w-[12rem] lg:mx-0 lg:mr-[1rem] lg:mt-0"
             />
             <div className="lg:w-1/3">
-              <h2 className=" text-[#0066FF] font-mainFont font-semibold text-[1.4rem] text-center mt-7 lg:text-left lg:text-3xl">
-                BUILT FOR ALL KINDS OF GAMERS
+              <h2 className=" text-[#6B0000] font-mainFont font-semibold text-[1.4rem] text-center mt-7 lg:text-left lg:text-3xl">
+              DESIGNED FOR EVERY MOVIE LOVER
               </h2>
               <p className="text-center text-white font-mainFont mb-[5rem] lg:text-xl  font-extralight mt-4 lg:text-left">
-                GameGrove's site offers seamless navigation, exclusive deals,
-                and vibrant visuals for an immersive and enjoyable gaming
-                adventure. Lorem Ipsum Doloret Chipi Chipi Chapa Chapa Dubi Dubi
-                Daba
+              CineSphere’s platform offers smooth browsing, special discounts, 
+              and stunning visuals for a seamless and delightful ticket booking experience. 
+              Whether you're into rom-coms or thrillers, your next movie night is just a click away!
+
               </p>
             </div>
           </div>
@@ -79,7 +78,7 @@ const About = () => {
             <h1 className="text-white text-4xl font-mainFont font-normal text-center lg:text-6xl">
               Our
             </h1>
-            <h1 className="text-[#0066FF] text-4xl font-mainFont font-normal text-center lg:text-6xl  ">
+            <h1 className="text-[#6B0000] text-4xl font-mainFont font-normal text-center lg:text-6xl  ">
               Team
             </h1>
           </div>

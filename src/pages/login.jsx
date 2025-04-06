@@ -1,5 +1,5 @@
 import React from "react";
-import Img from "../images/img3.jpg";
+import Img1 from "../images/img1.jpg";
 import { NavLink } from "react-router-dom";
 
 const Login = () => {
@@ -8,7 +8,7 @@ const Login = () => {
       <img
         id="image"
         className="absolute z-0 w-screen h-screen object-cover"
-        src={Img}
+        src={Img1}
       ></img>
       <div className="flex items-center justify-center h-screen">
         <div className="bg-transparent backdrop-blur-lg w-full lg:w-1/4 p-[2.5rem] border-[0.1rem] border-amber-50 rounded-xl font-mono">
