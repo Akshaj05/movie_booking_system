@@ -13,8 +13,8 @@ const MyBookings = () => {
   useEffect(() => {
     try {
       const storedUser = JSON.parse(localStorage.getItem("user"));
-      if (storedUser && storedUser.id) {
-        setUid(storedUser.id);
+      if (storedUser && storedUser.u_id) {
+        setUid(storedUser.u_id);
       } else {
         setError("User not found. Please log in.");
         setLoading(false);
@@ -36,9 +36,13 @@ const MyBookings = () => {
   async function fetchBookings() {
     setLoading(true);
     try {
-      const { data, error } = await supabase
+      console.log("Fetching bookings for user ID:", uid);
+
+      // First, get all bookings for this user
+      const { data: bookingsData, error: bookingsError } = await supabase
         .from("booking")
-        .select(`
+        .select(
+          `
           b_id,
           price,
           show_timings (
@@ -48,15 +52,57 @@ const MyBookings = () => {
               m_image
             )
           )
-        `)
+        `
+        )
         .eq("u_id", uid);
 
-      if (error) {
-        console.error("Supabase query error:", error);
-        setError("Failed to fetch bookings.");
-      } else {
-        setBookings(data);
-      }
+      if (bookingsError) throw bookingsError;
+
+      // For each booking, fetch the associated seat information
+      const bookingsWithSeats = await Promise.all(
+        bookingsData.map(async (booking) => {
+          // Get booking_seats entries for this booking
+          const { data: seatData, error: seatError } = await supabase
+            .from("booking_seats")
+            .select(
+              `
+              s_id,
+              seats:s_id (
+                seat_number,
+                category,
+                price
+              )
+            `
+            )
+            .eq("b_id", booking.b_id);
+
+          if (seatError) {
+            console.error(
+              `Error fetching seats for booking ${booking.b_id}:`,
+              seatError
+            );
+            return {
+              ...booking,
+              seats: [],
+            };
+          }
+
+          // Extract just the seat information we need
+          const seats = seatData.map((item) => ({
+            seat_number: item.seats.seat_number,
+            category: item.seats.category,
+            price: item.seats.price,
+          }));
+
+          return {
+            ...booking,
+            seats: seats,
+          };
+        })
+      );
+
+      console.log("Processed bookings:", bookingsWithSeats);
+      setBookings(bookingsWithSeats);
     } catch (err) {
       console.error("Unexpected error:", err);
       setError("Unexpected error. Check console.");
@@ -84,23 +130,50 @@ const MyBookings = () => {
                 key={booking.b_id}
                 className="bg-gray-800 p-4 rounded-lg shadow-lg"
               >
-                <img
-                  src={booking.show_timings?.movies?.m_image}
-                  alt={booking.show_timings?.movies?.m_name}
-                  className="w-full h-40 object-cover rounded-md mb-4"
-                />
+                {booking.show_timings?.movies?.m_image && (
+                  <img
+                    src={booking.show_timings.movies.m_image}
+                    alt={booking.show_timings?.movies?.m_name || "Movie poster"}
+                    className="w-full h-40 object-cover rounded-md mb-4"
+                  />
+                )}
                 <h3 className="text-lg font-bold mb-2">
-                  {booking.show_timings?.movies?.m_name}
+                  {booking.show_timings?.movies?.m_name || "Unknown Movie"}
                 </h3>
-                <p className="text-sm text-gray-400">
+                <p className="text-sm text-gray-400 mb-1">
                   <strong>Booking ID:</strong> {booking.b_id}
                 </p>
-                <p className="text-sm text-gray-400">
+                <p className="text-sm text-gray-400 mb-1">
                   <strong>Price:</strong> ₹{booking.price}
                 </p>
-                <p className="text-sm text-gray-400">
-                  <strong>Timing:</strong> {booking.show_timings?.timing}
+                <p className="text-sm text-gray-400 mb-3">
+                  <strong>Timing:</strong>{" "}
+                  {booking.show_timings?.timing || "N/A"}
                 </p>
+
+                {/* Seats information */}
+                <div className="mt-3 pt-3 border-t border-gray-700">
+                  <p className="font-semibold mb-2">Seats:</p>
+                  {booking.seats && booking.seats.length > 0 ? (
+                    <div className="flex flex-wrap gap-2">
+                      {booking.seats.map((seat, index) => (
+                        <span
+                          key={index}
+                          className="px-2 py-1 bg-red-900/40 rounded text-sm flex items-center"
+                          title={`${seat.category || "Unknown"} - ₹${
+                            seat.price || "N/A"
+                          }`}
+                        >
+                          {seat.seat_number || "Unknown"}
+                        </span>
+                      ))}
+                    </div>
+                  ) : (
+                    <p className="text-sm text-gray-500">
+                      No seat information available
+                    </p>
+                  )}
+                </div>
               </div>
             ))}
           </div>
