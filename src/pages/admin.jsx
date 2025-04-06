@@ -292,16 +292,16 @@ const Admin = () => {
                 Current Users
               </h3>
               <div className="overflow-x-auto">
-                <table className="min-w-full divide-y  border">
-                  <thead className="bg-gray-300">
+                <table className="min-w-full divide-y  border border-white">
+                  <thead className="bg-gray-700 ">
                     <tr>
-                      <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">
+                      <th className="px-4 py-2 text-left text-xs font-medium text-gray-300 uppercase">
                         ID
                       </th>
-                      <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">
+                      <th className="px-4 py-2 text-left text-xs font-medium text-gray-300 uppercase">
                         Email
                       </th>
-                      <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">
+                      <th className="px-4 py-2 text-left text-xs font-medium text-gray-300 uppercase">
                         Status
                       </th>
                     </tr>
@@ -410,7 +410,7 @@ const Admin = () => {
                         value={movieSearch}
                         onChange={handleMovieSearch}
                         required
-                        className="w-full px-3 py-2 border rounded text-gray-800"
+                        className="w-full px-3 py-2 border rounded text-white"
                         placeholder="Search for a movie..."
                       />
 
@@ -467,7 +467,7 @@ const Admin = () => {
                       value={showTiming}
                       onChange={(e) => setShowTiming(e.target.value)}
                       required
-                      className="w-full px-3 py-2 border rounded text-gray-800"
+                      className="w-full px-3 py-2 border rounded text-white"
                     />
                   </div>
 
@@ -518,7 +518,7 @@ const Admin = () => {
                               onClick={() =>
                                 handleDeleteShowTiming(showTime.st_id)
                               }
-                              className="text-red-400 hover:text-red-300"
+                              className="text-red-600 hover:text-red-300"
                             >
                               Delete
                             </button>
