@@ -33,10 +33,10 @@ const Navbar = () => {
         <div className="flex content-center justify-center">
           <ul className="hidden lg:flex font-mono text-white no-underline text-[1.1rem] gap-7 self-center me-8 ">
             <li>
-              <Link to="/home">My Bookings</Link>
+              <Link to="/mybookings">My Bookings</Link>
             </li>
             <li>
-              <Link to="/home">Profile</Link>
+              <Link to="/profile">Profile</Link>
             </li>
           </ul>
         </div>

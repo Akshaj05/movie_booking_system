@@ -41,8 +41,8 @@ const App = () => {
           <Route path="/support" element={<Support />} />
           <Route path="/about" element={<About />} />
           <Route path="/admin" element={<Admin />} />
-          <Route path="mybookings" element={<MyBookings />} />
-          <Route path="profile" element={<Profile />} />
+          <Route path="/mybookings" element={<MyBookings />} />
+          <Route path="/profile" element={<Profile />} />
         </Routes>
       </Router>
     </UserProvider>
