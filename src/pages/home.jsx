@@ -54,7 +54,27 @@ const Home = () => {
             </div>
           </div>
         </div>
-        <div></div>
+        {/* Movie List Section */}
+        <div className="movie-list grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6 p-6">
+          {movieinfo.map((movie) => (
+            <div
+              key={movie.m_id}
+              className="movie-card bg-gray-800 text-white p-4 rounded-lg shadow-lg hover:shadow-xl transition-shadow"
+            >
+              <img
+                src={movie.m_image}
+                alt={movie.m_name}
+                className="w-60 object-cover rounded-md mb-4"
+              />
+              <Link
+                to={`/movie/${movie.id}`}
+                className="block mt-4 text-blue-500 hover:underline"
+              >
+                Book
+              </Link>
+            </div>
+          ))}
+        </div>
 
         <Footer />
       </div>
