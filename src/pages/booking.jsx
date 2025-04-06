@@ -252,11 +252,14 @@ const Booking = () => {
     );
   }
   const seatLayout = {
+    "Recliners : Rs. 410 ": [],
     A: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14],
+    "Royal : Rs. 280": [],
     B: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17],
     C: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17],
     D: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17],
     E: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17],
+    "Club : Rs. 280": [],
     F: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17],
     G: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15],
     H: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15],
@@ -264,6 +267,7 @@ const Booking = () => {
     J: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15],
     K: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15],
     L: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15],
+    "Executive : Rs. 280": [],
     M: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15],
     N: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15],
   };
@@ -272,15 +276,12 @@ const Booking = () => {
     return (
       <div className="mb-8">
         {/* Screen */}
-        <div className="w-3/4 h-8 mx-auto mb-10 bg-gray-400 rounded-lg flex items-center justify-center text-gray-800 font-bold">
-          SCREEN
-        </div>
 
         {/* Seat Layout */}
         {Object.entries(seatLayout).map(([row, seats]) => (
           <div key={row} className="mb-4">
             <div className="flex items-center gap-2 mb-1">
-              <span className="w-6 font-bold">{row}</span>
+              <span className="min-w-6 font-bold">{row}</span>
               <div className="grid grid-cols-17 gap-2">
                 {seats.map((number) => {
                   const seatId = `${row}${number}`;
@@ -305,6 +306,9 @@ const Booking = () => {
             </div>
           </div>
         ))}
+        <div className="w-3/4 h-8 mx-auto my-10 bg-gray-400 rounded-lg flex items-center justify-center text-gray-800 font-bold">
+          SCREEN
+        </div>
       </div>
     );
   }
@@ -387,12 +391,8 @@ const Booking = () => {
                 {/* Theatre layout */}
                 <div className="mb-8">
                   {/* Screen */}
-                  <div className="w-3/4 h-8 mx-auto mb-10 bg-gray-400 rounded-lg flex items-center justify-center text-gray-800 font-bold">
-                    SCREEN
-                  </div>
-
                   {/* Seat map */}
-                  <div className="p-6 bg-black min-h-screen text-white">
+                  <div className="p-6  min-h-screen text-white">
                     <h1 className="text-2xl font-bold mb-4">Book Your Seat</h1>
                     <SeatSelector
                       selectedSeats={selectedSeats}
