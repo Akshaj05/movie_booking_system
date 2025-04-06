@@ -130,13 +130,6 @@ const MyBookings = () => {
                 key={booking.b_id}
                 className="bg-gray-800 p-4 rounded-lg shadow-lg"
               >
-                {booking.show_timings?.movies?.m_image && (
-                  <img
-                    src={booking.show_timings.movies.m_image}
-                    alt={booking.show_timings?.movies?.m_name || "Movie poster"}
-                    className="w-full h-40 object-cover rounded-md mb-4"
-                  />
-                )}
                 <h3 className="text-lg font-bold mb-2">
                   {booking.show_timings?.movies?.m_name || "Unknown Movie"}
                 </h3>
