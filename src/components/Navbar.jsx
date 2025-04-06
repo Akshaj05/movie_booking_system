@@ -13,7 +13,7 @@ const Navbar = () => {
             alt="logo"
           ></img>
           <h1 className="font-mono font-[500] lg:text-[1.2rem] text-[1rem]  text-white self-center ml-2">
-          CineSphere
+            CineSphere
           </h1>
           <ul className="hidden lg:flex font-mono text-white no-underline text-[1.1rem] gap-7 self-center ms-8 ">
             <li>
@@ -24,6 +24,19 @@ const Navbar = () => {
             </li>
             <li>
               <Link to="/support">Support</Link>
+            </li>
+            <li>
+              <Link to="/admin">Add Movie</Link>
+            </li>
+          </ul>
+        </div>
+        <div className="flex content-center justify-center">
+          <ul className="hidden lg:flex font-mono text-white no-underline text-[1.1rem] gap-7 self-center me-8 ">
+            <li>
+              <Link to="/home">My Bookings</Link>
+            </li>
+            <li>
+              <Link to="/home">Profile</Link>
             </li>
           </ul>
         </div>
