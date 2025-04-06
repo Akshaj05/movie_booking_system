@@ -1,7 +1,21 @@
 import React from "react";
 import Logo from "../images/logo.png";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 const Navbar = () => {
+  const [userType, setUserType] = useState(0);
+  async function fetchUserType() {
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (user) {
+      setUserType(user.user_type);
+    }
+  }
+  console.log(userType);
+
+  useEffect(() => {
+    fetchUserType();
+  }, []);
+
   return (
     <div>
       <div className="flex justify-between content-between bg-[#6B0000]  py-[1rem] mx-auto">
@@ -25,9 +39,11 @@ const Navbar = () => {
             <li>
               <Link to="/support">Support</Link>
             </li>
-            <li>
-              <Link to="/admin">Add Movie</Link>
-            </li>
+            {userType === 1 && (
+              <li>
+                <Link to="/admin">Admin Panel</Link>
+              </li>
+            )}
           </ul>
         </div>
         <div className="flex content-center justify-center">
