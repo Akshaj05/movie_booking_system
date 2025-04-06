@@ -2,9 +2,25 @@ import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
 import Navbar from "../components/Navbar.jsx";
 import Footer from "../components/Footer.jsx";
+import { useParams } from "react-router-dom";
+import { supabase } from "../CreateClient.js";
+import { useEffect } from "react";
+import { useContext } from "react";
+import { Link } from "react-router-dom";
 
 const MoviePg = () => {
   const [activeTab, setActiveTab] = useState("about");
+
+  const { m_id } = useParams();
+  const [movieinfo, setMovieInfo] = useState([]);
+
+  async function fetchMovieInfo() {
+    const { data } = await supabase.from("movies").select("*").eq("m_id", m_id);
+    setMovieInfo(data);
+  }
+  useEffect(() => {
+    fetchMovieInfo();
+  }, []);
 
   return (
     <>
@@ -16,10 +32,12 @@ const MoviePg = () => {
             {/* Left Column - Movie Info */}
             <div className="md:w-1/2  flex flex-col gap-15">
               <div>
-                <h1 className="text-4xl font-bold mb-4">Movie Name</h1>
+                <h1 className="text-4xl font-bold mb-4">
+                  {movieinfo[m_id]?.m_name}
+                </h1>
                 <div className="flex items-center space-x-4 mb-4">
                   <span className="px-2 py-1 bg-red-900 text-xs rounded">
-                    SCI-FI
+                    {movieinfo[m_id]?.m_genre}
                   </span>
                   <span className="text-gray-400">English</span>
                   <span className="text-gray-400">Brian Cranston</span>

@@ -11,6 +11,8 @@ const Movie = () => {
   //Fetching the movie data from the database
   const { uid } = useContext(UserContext);
   const navigate = useNavigate();
+  const { movieid } = useParams();
+  console.log(movieid);
 
   const [movieinfo, setMovieInfo] = useState([]);
 
@@ -25,16 +27,14 @@ const Movie = () => {
   console.log(movieinfo);
   return;
   <>
-    <Link to="/movie/${movieinfo.m-name}">
-      <div className="min-w-[45vw] min-h-[15vh] lg:min-w-[20vw] max-w-[20vw] lg:min-h-[25vh] lg:max-h-[49vh] bg-[#2C2E33] rounded-xl mx-auto">
+    <Link to="/movie/:movieid">
+      <div className="bg-[#101216] w-[20vw] h-[30vh] rounded-lg flex flex-col justify-center items-center">
         <img
-          src={movieinfo.m_img}
-          className="rounded-t-xl lg:h-[25vh] lg:w-[20vw] h-[15vh] w-[20vw]"
+          src={movieinfo[movieid].m - image}
+          className="rounded-lg w-[20vw] h-[30vh]"
         ></img>
-        <div className="flex flex-col justify-center items-center mt-2">
-          <h1 className="text-white font-mono font-[450] text-[1.5rem] text-center tracking-wide drop-shadow-2xl">
-            {movieinfo.m_name}
-          </h1>
+        <div className="text-white font-mono font-[450] text-[1.5rem] text-center mb-7 tracking-wide drop-shadow-2xl">
+          {movieinfo[movieid].m - name}
         </div>
       </div>
     </Link>
