@@ -13,7 +13,7 @@ const About = () => {
     <div className=" w-screen h-screen bg-[#181C24]">
       <Navbar />
 
-      <div className=" bg-[#151617] w-full h-1/3 lg:h-[2] lg:pt-10 lg:pb-10">
+      <div className=" bg-[#151617] w-full  lg:pt-10 lg:pb-10">
         <div className="flex justify-center gap-3 lg:gap-5">
           <h1 className="text-white text-4xl font-mainFont font-normal text-center pt-10 lg:text-6xl">
             About
@@ -37,7 +37,7 @@ const About = () => {
             <img
               src={Icon1}
               alt="icon"
-              className="w-1/3 h-1/3 mx-auto mt-10 lg:h-[10rem] lg:w-[10rem] lg:mx-0 lg:mr-[3rem]"
+              className="w-1/3  mx-auto mt-15 lg:h-[10rem] lg:w-[10rem] lg:mx-0 lg:mr-[3rem]"
             />
             <div className="lg:w-1/3">
               <h2 className=" text-[#6B0000] font-mainFont font-semibold text-[1.4rem] text-center mt-7 lg:text-left lg:text-3xl">
@@ -59,7 +59,7 @@ const About = () => {
             <img
               src={Icon2}
               alt="icon"
-              className=" mx-auto mt-10 h-[12rem] w-[12rem] lg:mx-0 lg:mr-[1rem] lg:mt-0"
+              className=" mx-auto mt-13 h-[12rem] w-[12rem] lg:mx-0 lg:mr-[1rem] "
             />
             <div className="lg:w-1/3">
               <h2 className=" text-[#6B0000] font-mainFont font-semibold text-[1.4rem] text-center mt-7 lg:text-left lg:text-3xl">
