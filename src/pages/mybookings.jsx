@@ -114,7 +114,7 @@ const MyBookings = () => {
   return (
     <div className="bg-[#101216] text-white min-h-screen flex flex-col">
       <NavBar />
-      <div className="flex-grow px-4 py-8 md:px-12 w-full">
+      <div className="flex-grow px-4 py-8 md:px-12 w-[100vw] lg:w-full">
         <h2 className="text-2xl font-semibold mb-8">My Bookings</h2>
 
         {loading ? (
@@ -128,7 +128,7 @@ const MyBookings = () => {
             {bookings.map((booking) => (
               <div
                 key={booking.b_id}
-                className="bg-gray-800 p-4 rounded-lg shadow-lg"
+                className="bg-gray-800 p-4 rounded-lg shadow-lg "
               >
                 <h3 className="text-lg font-bold mb-2">
                   {booking.show_timings?.movies?.m_name || "Unknown Movie"}
